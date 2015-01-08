@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
+    <ShortName>Универсальный поиск</ShortName>
+    <Description>Универсальный поиск ищет правильнее других</Description>
+    <Url type="text/html" 
+        template="http://localhost:8080/search/{searchTerms}"/>
+     <Url type="application/json"
+         rel="suggestions"
+         template="https://suggest.yandex.net/suggest-ff.cgi?part={searchTerms}" />
+    <OutputEncoding>UTF-8</OutputEncoding>
+    <InputEncoding>UTF-8</InputEncoding>
+</OpenSearchDescription>

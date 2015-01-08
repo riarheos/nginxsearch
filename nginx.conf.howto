@@ -1,0 +1,8 @@
+http {
+    perl_require  nginxsearch.pm;
+    server {
+        location /search {
+            perl nginxsearch::handler;
+        }
+    }
+}

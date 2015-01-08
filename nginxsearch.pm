@@ -11,6 +11,11 @@ my %ENGINES = (
     'host'   => 'https://golem.yandex-team.ru/hostinfo.sbml?object=',
 );
 
+my %STATIC = (
+    ''               => ['text/html', 'index.html'],
+    'opensearch.xml' => ['text/xml', 'opensearch.xml'],
+);
+
 my @REPLACES = (
     # word     replacement            engine
     [ 'mysql', 'site:dev.mysql.com ', 'lucky' ],
@@ -24,6 +29,18 @@ sub handler {
     # extract the query
     my $query = $r->filename;
     $query =~ s~.*/search/~~;
+
+    # statics
+    if ($STATIC{$query}) {
+        my $f;
+        open ($f, "/Users/paulus/build/nginxsearch/$STATIC{$query}->[1]");
+        my $data = join("", <$f>);
+        close ($f);
+
+        $r->send_http_header($STATIC{$query}->[0]);
+        $r->print($data);
+        return OK;
+    }
 
     # russian letters
     if ($query =~ /[а-я]/i) {
