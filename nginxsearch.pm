@@ -3,12 +3,14 @@ package nginxsearch;
 use strict;
 use warnings;
 use nginx;
+use utf8;
 
 my %ENGINES = (
     'google' => 'https://www.google.ru/search?q=',
     'lucky'  => 'https://www.google.ru/search?btnI=1&q=',
     'yandex' => 'https://yandex.ru/yandsearch?text=',
     'host'   => 'https://golem.yandex-team.ru/hostinfo.sbml?object=',
+    'jdict'  => 'http://ejje.weblio.jp/content/',
 );
 
 my %STATIC = (
@@ -20,6 +22,8 @@ my @REPLACES = (
     # word     replacement            engine
     [ 'mysql', 'site:dev.mysql.com ', 'lucky' ],
     [ 'host',  '',                    'host'  ],
+    [ 'g',     '',                    'google'],
+    [ 'j',     '',                    'jdict'],
 );
 
 sub handler {
@@ -29,6 +33,7 @@ sub handler {
     # extract the query
     my $query = $r->filename;
     $query =~ s~.*/search/~~;
+    utf8::decode($query);
 
     # statics
     if ($STATIC{$query}) {
@@ -45,12 +50,14 @@ sub handler {
     # russian letters
     if ($query =~ /[а-я]/i) {
         $engine = 'yandex';
+    } elsif ($query =~ /[\x{4E00}-\x{9FBF}\x{3040}-\x{309F}\x{30A0}-\x{30FF}]/) {
+        $engine = 'jdict';
     }
 
     # special replacements
     foreach (@REPLACES) {
-        if ($query =~ /^$_->[0]/) {
-            $query =~ s/^$_->[0]\s*/$_->[1]/;
+        if ($query =~ /^$_->[0] /) {
+            $query =~ s/^$_->[0]\s+/$_->[1]/;
             $engine = $_->[2];
             last;
         }
