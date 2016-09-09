@@ -11,6 +11,8 @@ my %ENGINES = (
     'yandex' => 'https://yandex.ru/yandsearch?text=',
     'host'   => 'https://golem.yandex-team.ru/hostinfo.sbml?object=',
     'jdict'  => 'http://ejje.weblio.jp/content/',
+    'staff'  => 'https://staff.yandex-team.ru/',
+    'st'     => 'https://st.yandex-team.ru/',
 );
 
 my %STATIC = (
@@ -24,6 +26,8 @@ my @REPLACES = (
     [ 'host',  '',                    'host'  ],
     [ 'g',     '',                    'google'],
     [ 'j',     '',                    'jdict'],
+    [ 's',     '',                    'staff'],
+    [ 'st',    '',                    'st'],
 );
 
 sub handler {

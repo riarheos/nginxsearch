@@ -1,3 +1,6 @@
+file is in /usr/local/etc/nginx
+
+
 http {
     perl_require  nginxsearch.pm;
     server {
